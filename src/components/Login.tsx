@@ -2,13 +2,17 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/userSlice';
 
 
 
 
 
 export default function Login() {
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -26,7 +30,9 @@ export default function Login() {
                 withCredentials: true
             })
 
-            console.log(response);
+            console.log(response.data);
+            dispatch(setUser(response.data));
+            navigate('/');
         } catch (error) {
             console.log(error);
         }
