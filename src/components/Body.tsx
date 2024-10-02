@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-
+import axios from 'axios';
 
 export default function Body() {
 
@@ -13,9 +13,9 @@ export default function Body() {
     })
 
     function arrivalData(e: React.ChangeEvent<HTMLInputElement>) {
-        console.log(e.target);
+        //console.log(e.target);
         const { name, value } = e.target;
-        console.log(value);
+        //console.log(value);
 
         setFormData((prevData) => ({
             ...prevData,
@@ -41,9 +41,21 @@ export default function Body() {
         }))
     }
 
-    function submitHandler(e: React.FormEvent<HTMLFormElement>){
+    async function submitHandler(e: React.FormEvent<HTMLFormElement>){
        e.preventDefault();
-       console.log(formData);
+      // console.log(formData);
+        try {
+            const response = await axios.get(`http://localhost:3000/api/v1/flights?trips=${formData.arrival}-${formData.destination}&date=${formData.date}`,{
+                headers: {
+                  'Content-Type': 'application/json', // Set Content-Type header
+                }}
+            );
+            console.log(response.data.data);
+        } catch (error) {
+            console.log(error);
+            
+        }
+      
     }
 
     return (
