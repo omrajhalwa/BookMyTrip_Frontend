@@ -1,4 +1,4 @@
-
+import { TbTransfer } from "react-icons/tb";
 import { useState } from "react";
 import axios from 'axios';
 import { useDispatch } from "react-redux";
@@ -85,8 +85,12 @@ export default function Home() {
                             value={formData.arrival}
                             onChange={arrivalData}
                             className="border-slate-500 rounded-md border-2 mx-2 text-md text-slate-700"
-                            placeholder="arrival airport"
+                            placeholder="   arrival airport"
                         />
+                    </div>
+
+                    <div className="text-2xl">
+                        <TbTransfer />
                     </div>
 
                     <div>
@@ -97,7 +101,7 @@ export default function Home() {
                             value={formData.destination}
                             onChange={destinationData}
                             className="border-slate-500 rounded-md border-2 mx-2"
-                            placeholder="arrival airport"
+                            placeholder="  destination airport"
                         />
                     </div>
 
@@ -113,7 +117,7 @@ export default function Home() {
                         />
                     </div>
 
-                    <button className="bg-blue-600 text-md p-1 text-white rounded-md">Search</button>
+                    <button className="bg-blue-600 text-md py-1 px-2 text-white rounded-md">Search</button>
                     </div>
                 </form>
             </div>
