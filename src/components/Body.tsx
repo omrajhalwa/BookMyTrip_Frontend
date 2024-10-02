@@ -21,7 +21,7 @@ export default function Body() {
 
 
     return (
-        <div>
+        <div className='h-full w-full'>
             <RouterProvider router = {appRouter}/>
         </div>
     )

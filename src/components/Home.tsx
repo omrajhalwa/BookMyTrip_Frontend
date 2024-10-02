@@ -1,17 +1,25 @@
 
 import { useState } from "react";
 import axios from 'axios';
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setFlightDetails } from "../redux/flightSlice";
 export default function Home() {
+    //dispatching into redux store
+    const dispatch = useDispatch();
 
+    //navigating to another page
+    const navigate = useNavigate();
 
+    //whole form info in single object
     const [formData, setFormData] = useState({
         arrival: '',
         destination: "",
         date: ''
 
     })
-
+    
+    //for setting arrival city
     function arrivalData(e: React.ChangeEvent<HTMLInputElement>) {
         //console.log(e.target);
         const { name, value } = e.target;
@@ -23,6 +31,7 @@ export default function Home() {
         }));
     }
     
+    //for setting destination city
     function destinationData(e : React.ChangeEvent<HTMLInputElement>) {
         const {name, value} = e.target;
 
@@ -31,7 +40,8 @@ export default function Home() {
             [name] : value
         }));
     }
-
+    
+    // for setting date into state
     function dateData(e : React.ChangeEvent<HTMLInputElement>) {
         const {name, value} =e.target;
 
@@ -50,7 +60,9 @@ export default function Home() {
                   'Content-Type': 'application/json', // Set Content-Type header
                 }}
             );
-            console.log(response.data.data);
+            //console.log(response.data.data);
+            dispatch(setFlightDetails(response.data.data));
+            navigate("flights");
         } catch (error) {
             console.log(error);
             
