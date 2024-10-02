@@ -1,7 +1,7 @@
 import {RouterProvider , createBrowserRouter} from 'react-router-dom';
 import Parent from './Parent';
 import Flight from './Flight';
-
+import Login from './Login';
 
 
 
@@ -16,6 +16,10 @@ export default function Body() {
         ,{
             path:"/flights",
             element:<Flight/>
+        },
+        {
+            path:"/login",
+            element:<Login/>
         }
     ])
 

@@ -20,6 +20,6 @@ export const flightSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setFlightDetails } = flightSlice.actions
+export const { setFlightDetails } = flightSlice.actions;
 
-export default flightSlice.reducer
+export default flightSlice.reducer;

@@ -48,19 +48,19 @@ export default function Home() {
         setFormData((prevData) => ({
             ...prevData,
             [name] : value
-        }))
+        }));
     }
 
     async function submitHandler(e: React.FormEvent<HTMLFormElement>){
        e.preventDefault();
-      // console.log(formData);
+       // console.log(formData);
         try {
             const response = await axios.get(`http://localhost:3000/api/v1/flights?trips=${formData.arrival}-${formData.destination}&date=${formData.date}`,{
                 headers: {
                   'Content-Type': 'application/json', // Set Content-Type header
                 }}
             );
-            //console.log(response.data.data);
+        //console.log(response.data.data);
             dispatch(setFlightDetails(response.data.data));
             navigate("flights");
         } catch (error) {
