@@ -1,4 +1,4 @@
-import { useState ,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { RootState } from "../redux/store";
@@ -6,13 +6,11 @@ import axios from 'axios';
 import { setBookingTransaction } from '../redux/userSlice';
 
 
+
 export default function Booking() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-
-
 
 
     const flightId = useSelector((store: RootState) => store.flightSlice?.selectedFlight);

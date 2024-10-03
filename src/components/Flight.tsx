@@ -17,7 +17,8 @@ export default function Flight() {
         return new Date(getdata).toLocaleTimeString('en-US', { hour12: false });
     }
 
-    function bookingHandler(flightId: string) {
+    function bookingHandler(flightId: string, flightPrice: Number) {
+        console.log(flightPrice);
         dispatch(setSelectedFlight(flightId));
         navigate('/bookings');
     }
@@ -93,7 +94,7 @@ export default function Flight() {
                                     </div>
 
                                     <div className="py-2">
-                                        <button onClick={(event: React.MouseEvent<HTMLButtonElement>) => bookingHandler(flight.id)} className="bg-orange-500  px-4 rounded-md  py-1 text-md">Book</button>
+                                        <button onClick={(event: React.MouseEvent<HTMLButtonElement>) => bookingHandler(flight.id, flight.price)} className="bg-orange-500  px-4 rounded-md  py-1 text-md">Book</button>
                                     </div>
                                 </div>
 

@@ -10,19 +10,20 @@ import { RootState } from '../redux/store';
 
 
 export default function Parent() {
-    
+
     const navigate = useNavigate();
-    const user = useSelector((store : RootState) => store.userSlice.user);
-   useEffect(()=>{
-        if(!user.id){
+    const user = useSelector((store: RootState) => store.userSlice.user);
+
+    useEffect(() => {
+        if (!user.id) {
             navigate('/login');
         }
-   },[])
+    }, [])
 
     return (
         <div>
-            <NavBar/>
-            <Home/>
+            <NavBar />
+            <Home />
         </div>
     )
 }
