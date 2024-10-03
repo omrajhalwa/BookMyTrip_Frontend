@@ -1,23 +1,62 @@
-import { useState } from 'react';
-import { useSelector } from "react-redux";
+import { useState ,useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { RootState } from "../redux/store";
-
+import axios from 'axios';
+import { setBookingTransaction } from '../redux/userSlice';
 
 
 export default function Booking() {
 
-    const flightId = useSelector((store: RootState) => store?.flightSlice?.selectedFlight);
-    const user = useSelector((store: RootState) => store.userSlice.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+
+
+
+
+    const flightId = useSelector((store: RootState) => store.flightSlice?.selectedFlight);
+    const user = useSelector((store: RootState) => store.userSlice?.user);
+
 
     const [noOfSeats, setNoOfSeats] = useState(1);
-    
-    function submitHandler(event : React.FormEvent<HTMLFormElement>) {
+
+
+    useEffect(() => {
+        if (!user.id) {
+            navigate('/login');
+        }
+    }, [])
+
+
+    async function submitHandler(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        console.log({
-            flightId,
-            userId:user.id,
-            noOfSeats
-        });
+
+        // console.log({
+        //     flightId,
+        //     userId: user.id,
+        //     noOfSeats
+        // });
+
+        try {
+
+            const response = await axios.post('http://localhost:3001/bookingService/api/v1/bookings/', {
+                flightId,
+                userId: user.id,
+                noOfSeats
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            });
+
+            console.log(response);
+            dispatch(setBookingTransaction(response.data.data));
+            navigate('/payment');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
