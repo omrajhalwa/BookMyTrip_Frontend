@@ -2,7 +2,8 @@ import {RouterProvider , createBrowserRouter} from 'react-router-dom';
 import Parent from './Parent';
 import Flight from './Flight';
 import Login from './Login';
-
+import Payment from './Payment';
+import Booking from './Booking';
 
 
 export default function Body() {
@@ -20,6 +21,14 @@ export default function Body() {
         {
             path:"/login",
             element:<Login/>
+        },
+        {
+            path:'/bookings',
+            element:<Booking/>
+        },
+        {
+            path:'/payment',
+            element:<Payment/>
         }
     ])
 

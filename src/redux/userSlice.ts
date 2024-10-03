@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface CounterState {
-  user: string
+  user: any
 }
 
 const initialState: CounterState = {
-  user: ''
+  user: {}
 }
 
 export const userSlice = createSlice({
