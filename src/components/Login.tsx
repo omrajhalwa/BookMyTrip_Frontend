@@ -1,3 +1,6 @@
+// React
+import { motion } from "framer-motion"
+
 
 
 import { useState } from 'react';
@@ -40,9 +43,12 @@ export default function Login() {
 
     return (
 
-        <div className='flex justify-center w-full max-h-screen flex-col'>
+        <div  className='flex justify-center w-full h-screen  flex-col bg-blue-400'>
+            
             <form onSubmit={submitHandler}>
-                <div className='p-80'>
+                <div  className='p-80'>
+
+                {/* <motion.div animate={{ x: 100 }} /> */}
                     <div className='text-4xl font-bold p-10'>
                         Login
                     </div>

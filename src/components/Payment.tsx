@@ -1,9 +1,11 @@
+
 import { useSelector } from "react-redux"
 import { RootState } from "../redux/store"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-
+import BookingLoading from './BookingLoading'
 
 
 
@@ -15,6 +17,15 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Payment() {
+
+    const [isLoading, setIsLoading] = useState(true);
+
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 5000)
+    }, [])
 
     const { bookingTransaction } = useSelector((store: RootState) => store.userSlice);
     const navigate = useNavigate();
@@ -32,55 +43,66 @@ export default function Payment() {
             }, {
                 headers: {
                     "Content-Type": "application/json",
-                    "x-idempotency-key": "1345145"
+                    "x-idempotency-key": `${bookingTransaction.id}`
                 }
                 ,
                 withCredentials: true
             })
 
-            console.log(response);
+            console.log(response.data);
 
-            navigate('/');
+            if (response.data.success) {
+                navigate('/payment/transaction');
+            }
         } catch (error) {
             console.log(error);
         }
     }
 
     return (
-        <div className="flex justify-center">
+
+        <>
+            {
+                isLoading ? (<BookingLoading />) : (
+
+                    <div className="flex justify-center">
 
 
-            <div className="">
+                        <div className="">
 
-                <div className="font-bold text-4xl">
-                    payment
-                </div>
+                            <div className="font-bold text-4xl">
+                                payment
+                            </div>
 
-                <div>
-                    <form onSubmit={submitHandler}>
-                        <div>
-                            Booking Status - {bookingTransaction.status}
-                        </div>
-                        <div>
-                            Booking Id   - {bookingTransaction.id}
-                        </div>
-                        <div>
-                            flightId -{bookingTransaction.flightId}
-                        </div>
-                        <div>
-                            userId - {bookingTransaction.userId}
-                        </div>
+                            <div>
+                                <form onSubmit={submitHandler}>
+                                    <div>
+                                        Booking Status - {bookingTransaction.status}
+                                    </div>
+                                    <div>
+                                        Booking Id   - {bookingTransaction.id}
+                                    </div>
+                                    <div>
+                                        flightId -{bookingTransaction.flightId}
+                                    </div>
+                                    <div>
+                                        userId - {bookingTransaction.userId}
+                                    </div>
 
-                        <div>
-                            totalCost - {bookingTransaction.totalCost}
-                        </div>
+                                    <div>
+                                        totalCost - {bookingTransaction.totalCost}
+                                    </div>
 
-                        <div>
-                            <button className="bg-blue-500 px-6 py-1 text-white rounded-md">pay</button>
+                                    <div>
+                                        <button className="bg-blue-500 px-6 py-1 text-white rounded-md">pay</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    </div>
+                )
+            }
+        </>
+
     )
 }

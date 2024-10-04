@@ -22,7 +22,7 @@ export default function Parent() {
 
     return (
         <div>
-            <NavBar />
+            
             <Home />
         </div>
     )

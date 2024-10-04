@@ -4,6 +4,7 @@ import Flight from './Flight';
 import Login from './Login';
 import Payment from './Payment';
 import Booking from './Booking';
+import PaymentDone from './PaymentDone';
 
 
 export default function Body() {
@@ -29,6 +30,9 @@ export default function Body() {
         {
             path: '/payment',
             element: <Payment />
+        }, {
+            path: '/payment/transaction',
+            element: <PaymentDone />
         }
     ])
 
