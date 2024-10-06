@@ -1,5 +1,5 @@
 import { TbTransfer } from "react-icons/tb";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,27 +13,37 @@ export default function Home() {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const users = [
-        { firstName: 'Delhi' },
-        { firstName: 'Mumbai' },
-        { firstName: 'Bhopal' },
-        { firstName: 'Indore' },
-        { firstName: 'Jabalpur' },
-        { firstName: 'Banglore' }
-    ]
-
-    const [filterCity1, setFilterCity1] = useState(users);
-    const [filterCity2, setFilterCity2] = useState(users);
+    let [users, setUsers] = useState([{ address: 'Mumbai', code: 'MUM' },
+        { address: 'Delhi', code: 'DEL' }]);
 
 
     useEffect(() => {
+
+        async function getData() {
+            try {
+                const response = await axios.get('http://localhost:3000/api/v1/airports/');
+                //console.log(response);
+                if (response.data.data) {
+                    setUsers(response.data.data);
+                }
+                //console.log(users);
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+
+        getData();
 
         setTimeout(() => {
             setIsLoading(false);
         }, 1000)
     }, [])
 
+    const [filterCity1, setFilterCity1] = useState(users);
+    const [filterCity2, setFilterCity2] = useState(users);
 
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
 
 
@@ -59,7 +69,8 @@ export default function Home() {
         const searchCity = value;
 
         const filterItems = users.filter((user) =>
-            user.firstName.toLowerCase().includes(searchCity.toLowerCase()));
+            user.address.toLowerCase().includes(searchCity.toLowerCase()));
+        //console.log(filterItems)
         setFilterCity1(filterItems);
 
         setFormData((prevData) => ({
@@ -71,13 +82,13 @@ export default function Home() {
     //for setting destination city
     function destinationData(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
-        
+
         const searchCity = value;
 
         const filterItems = users.filter((user) =>
-            user.firstName.toLowerCase().includes(searchCity.toLowerCase()));
+            user.address.toLowerCase().includes(searchCity.toLowerCase()));
         setFilterCity2(filterItems);
-        
+
         setFormData((prevData) => ({
             ...prevData,
             [name]: value
@@ -127,11 +138,13 @@ export default function Home() {
                                 <div className="flex py-16 justify-evenly">
 
 
-                                    <div className=" ">
+                                    <div className="child-div " >
                                         <TextField
+                                            ref={inputRef}
                                             name='arrival'
                                             id="outlined-basic"
                                             label="From"
+                                            value={formData.arrival}
                                             variant="outlined"
                                             onChange={arrivalData}
                                             className="w-[80%]"
@@ -139,8 +152,22 @@ export default function Home() {
                                         />
                                         {
                                             formData.arrival == '' ? <></> :
-                                                <ul className="border-2 border-black px-4 py-2 bg-white ">
-                                                    {filterCity1.map((user) => <li className=""> * {user.firstName}</li>)}
+                                                <ul className="border-2 border-black  bg-white ">
+                                                    {filterCity1.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between"
+                                                        onClick={() => {
+                                                            setFormData((prevData) => ({
+                                                                ...prevData,
+                                                                "arrival": user.code
+                                                            }));
+
+                                                        }}
+                                                    >   <div>
+                                                            {user.address}
+                                                        </div>
+                                                        <div className="font-bold text-sm pt-2">
+                                                            {user.code}
+                                                        </div>
+                                                    </li>)}
                                                 </ul>
                                         }
                                     </div>
@@ -155,6 +182,7 @@ export default function Home() {
                                             id="destination"
                                             label="To"
                                             name="destination"
+                                            value={formData.destination}
                                             onChange={destinationData}
                                             variant="outlined"
                                             className="w-[80%]"
@@ -162,8 +190,22 @@ export default function Home() {
 
                                         {
                                             formData.destination == '' ? <></> :
-                                                <ul className="border-2 border-black px-4 py-2 bg-white z-100">
-                                                    {filterCity2.map((user) => <li className=""> * {user.firstName}</li>)}
+                                                <ul className="border-2 border-black  bg-white z-100">
+                                                    {filterCity2.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between"
+                                                        onClick={() => {
+                                                            setFormData((prevData) => ({
+                                                                ...prevData,
+                                                                "destination": user.code
+                                                            }));
+
+                                                        }}>
+                                                        <div>
+                                                            {user.address}
+                                                        </div>
+                                                        <div className="font-bold text-sm pt-2">
+                                                            {user.code}
+                                                        </div>
+                                                    </li>)}
                                                 </ul>
                                         }
                                     </div>
@@ -180,7 +222,7 @@ export default function Home() {
                                         />
                                     </div>
 
-                                    <button className="bg-blue-600 text-md py-4 text-lg px-10 font=bold text-white rounded-2xl absolute top-40 z-50">Search</button>
+                                    <button className="bg-blue-600 text-md py-3 text-2xl px-8 font-bold text-white rounded-2xl absolute top-40 z-50">Search</button>
                                 </div>
                             </form>
                         </div>
