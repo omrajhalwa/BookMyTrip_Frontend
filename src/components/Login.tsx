@@ -43,37 +43,41 @@ export default function Login() {
 
     return (
 
-        <div  className='flex justify-center w-full h-screen  flex-col bg-blue-400'>
-            
-            <form onSubmit={submitHandler}>
-                <div  className='p-80'>
+        <div className='flex justify-center w-full h-screen  bg-blue-950  py-10'>
 
-                {/* <motion.div animate={{ x: 100 }} /> */}
-                    <div className='text-4xl font-bold p-10'>
-                        Login
+            <form onSubmit={submitHandler} className="w-full flex justify-center">
+                <div className=' bg-black border-white border-2  justify-center rounded-lg w-[30%]'>
+
+                    {/* <motion.div animate={{ x: 100 }} /> */}
+                    <div className='text-4xl text-white font-bold my-10 flex justify-center'>
+                        <div>Log In</div>
                     </div>
 
-                    <div className='border-2 border-slate-400 m-2 rounded-md'>
-                        <input type="text"
-                            placeholder="   email"
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className='border-2 border-slate-500 w-full'
-                        />
+                    <div className="flex justify-center ">
+                        <div className='border-2 border-slate-400 m-2 rounded-lg w-[60%]'>
+                            <input type="text"
+                                placeholder="   email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className='border-2 border-blue-700 w-full rounded-lg'
+                            />
+                        </div>
                     </div>
 
-                    <div className='border-2 border-slate-400 m-2 rounded-md'>
-                        <input type="password"
-                            placeholder="   password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className='border-2 border-slate-500 w-full'
-                        />
+                    <div className="flex justify-center">
+                        <div className='border-2 border-slate-400 m-2 rounded-md w-[60%]'>
+                            <input type="password"
+                                placeholder="   password"
+                                name="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className='border-2 border-slate-500 w-full'
+                            />
+                        </div>
                     </div>
-                    <div className='flex justify-center'>
-                        <button className='px-4 py-2 bg-blue-600 rounded-md'>Login</button>
+                    <div className='flex justify-center mt-2'>
+                        <button className='px-4 py-2 bg-blue-600 rounded-md text-white'>Login</button>
                     </div>
 
                 </div>
