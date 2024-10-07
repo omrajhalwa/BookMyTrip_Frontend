@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import BookingLoading from './BookingLoading'
+import NavBar from "./NavBar";
 
 
 
@@ -61,7 +62,7 @@ export default function Payment() {
 
     return (
 
-        <>
+        <><NavBar/>
             {
                 isLoading ? (<BookingLoading />) : (
 

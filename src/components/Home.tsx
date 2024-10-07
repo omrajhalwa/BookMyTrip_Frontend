@@ -9,12 +9,53 @@ import NavBar from "./NavBar";
 import { TextField } from "@mui/material";
 export default function Home() {
 
-
-
     const [isLoading, setIsLoading] = useState(true);
+    const [flag, setFlag] = useState(true);
 
-    let [users, setUsers] = useState([{ address: 'Mumbai', code: 'MUM' },
-        { address: 'Delhi', code: 'DEL' }]);
+    let [users, setUsers] = useState([
+        { address: 'Mumbai', code: 'MUM', name: '' },
+        { address: 'Delhi', code: 'DEL', name: '' }
+    ]);
+
+    const [showRecommendations1, setShowRecommendations1] = useState(false);
+    const searchBarRef1 = useRef<HTMLInputElement | null>(null);
+    const recommendationsRef1 = useRef<HTMLInputElement | null>(null);
+
+    const [showRecommendations2, setShowRecommendations2] = useState(false);
+    const searchBarRef2 = useRef<HTMLInputElement | null>(null);
+    const recommendationsRef2 = useRef<HTMLInputElement | null>(null);
+
+    // Show recommendations when the search bar is focused
+    const handleFocus1 = () => {
+        setShowRecommendations1(true);
+    };
+    const handleFocus2 = () => {
+        setShowRecommendations2(true);
+    };
+
+    // Hide recommendations when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+        // console.log(event.target);
+        // console.log(searchBarRef.current)
+        // console.log(recommendationsRef.current)
+        if (
+            searchBarRef1.current &&
+            !searchBarRef1.current.contains(event.target as Node) &&
+            recommendationsRef1.current &&
+            !recommendationsRef1.current.contains(event.target as Node)
+        ) {
+            setShowRecommendations1(false);
+        }
+
+        if (
+            searchBarRef2.current &&
+            !searchBarRef2.current.contains(event.target as Node) &&
+            recommendationsRef2.current &&
+            !recommendationsRef2.current.contains(event.target as Node)
+        ) {
+            setShowRecommendations2(false);
+        }
+    };
 
 
     useEffect(() => {
@@ -22,11 +63,11 @@ export default function Home() {
         async function getData() {
             try {
                 const response = await axios.get('http://localhost:3000/api/v1/airports/');
-                //console.log(response);
+
                 if (response.data.data) {
                     setUsers(response.data.data);
                 }
-                //console.log(users);
+
             } catch (error) {
                 console.log(error);
             }
@@ -37,7 +78,15 @@ export default function Home() {
 
         setTimeout(() => {
             setIsLoading(false);
+
+
         }, 1000)
+
+
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
     }, [])
 
     const [filterCity1, setFilterCity1] = useState(users);
@@ -125,9 +174,14 @@ export default function Home() {
 
     }
 
+
+    function recommandHandler(e: any) {
+        setFlag(!flag);
+    }
+
     return (
 
-        <div>
+        <div >
             {isLoading ? (<Loading isLoading={isLoading} />) : (
                 <>
                     <NavBar />
@@ -140,7 +194,8 @@ export default function Home() {
 
                                     <div className="child-div " >
                                         <TextField
-                                            ref={inputRef}
+                                            ref={searchBarRef1}
+                                            onFocus={handleFocus1}
                                             name='arrival'
                                             id="outlined-basic"
                                             label="From"
@@ -151,9 +206,9 @@ export default function Home() {
 
                                         />
                                         {
-                                            formData.arrival == '' ? <></> :
-                                                <ul className="border-2 border-black  bg-white ">
-                                                    {filterCity1.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between"
+                                            showRecommendations1 && <div ref={recommendationsRef1} className="overflow-y-auto h-40">
+                                                <ul className="border-0 border-gray-700  bg-white z-100 rounded-md">
+                                                    {filterCity1.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between border border-gray-700 rounded-sm"
                                                         onClick={() => {
                                                             setFormData((prevData) => ({
                                                                 ...prevData,
@@ -161,20 +216,20 @@ export default function Home() {
                                                             }));
 
                                                         }}
-                                                    >   <div>
-                                                            {user.address}
+                                                    >    <div>
+                                                            <div>{user.address}</div>
+                                                            <div className="text-sm text-gray-500">{user.name}</div>
                                                         </div>
                                                         <div className="font-bold text-sm pt-2">
                                                             {user.code}
                                                         </div>
                                                     </li>)}
                                                 </ul>
+                                            </div>
                                         }
                                     </div>
 
-                                    <div className="text-4xl text-green-600 flex justify-center">
-                                        <TbTransfer />
-                                    </div>
+                                  
 
                                     <div>
 
@@ -185,13 +240,16 @@ export default function Home() {
                                             value={formData.destination}
                                             onChange={destinationData}
                                             variant="outlined"
-                                            className="w-[80%]"
+                                            className="w-[80%] font-bold"
+                                            ref={searchBarRef2}
+                                            onFocus={handleFocus2}
                                         />
 
                                         {
-                                            formData.destination == '' ? <></> :
-                                                <ul className="border-2 border-black  bg-white z-100">
-                                                    {filterCity2.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between"
+                                            showRecommendations2 && 
+                                            <div ref={recommendationsRef2} className="overflow-y-auto h-40 absolute top-30 z-20">
+                                                <ul className="border-0 border-gray-700  bg-white z-20 rounded-md  ">
+                                                    {filterCity2.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between border border-gray-700 rounded-sm"
                                                         onClick={() => {
                                                             setFormData((prevData) => ({
                                                                 ...prevData,
@@ -200,13 +258,15 @@ export default function Home() {
 
                                                         }}>
                                                         <div>
-                                                            {user.address}
+                                                            <div>{user.address}</div>
+                                                            <div className="text-sm text-gray-500">{user.name}</div>
                                                         </div>
                                                         <div className="font-bold text-sm pt-2">
                                                             {user.code}
                                                         </div>
                                                     </li>)}
                                                 </ul>
+                                            </div>
                                         }
                                     </div>
 
@@ -222,7 +282,7 @@ export default function Home() {
                                         />
                                     </div>
 
-                                    <button className="bg-blue-600 text-md py-3 text-2xl px-8 font-bold text-white rounded-2xl absolute top-40 z-50">Search</button>
+                                    <button className="bg-blue-900 text-md py-1 text-2xl px-8 font-bold text-white rounded-2xl absolute top-40 z-10">Search</button>
                                 </div>
                             </form>
                         </div>
