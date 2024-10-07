@@ -1,21 +1,22 @@
 import { TbTransfer } from "react-icons/tb";
-import { useEffect, useRef, useState } from "react";
+import { HtmlHTMLAttributes, useEffect, useRef, useState } from "react";
 import axios from 'axios';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFlightDetails } from "../redux/flightSlice";
 import Loading from "./Loading";
 import NavBar from "./NavBar";
 import { TextField } from "@mui/material";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import useAirports from "../hooks/useAirports";
+import { RootState } from "../redux/store";
 export default function Home() {
-
+    useAirports();
     const [isLoading, setIsLoading] = useState(true);
     const [flag, setFlag] = useState(true);
-
-    let [users, setUsers] = useState([
-        { address: 'Mumbai', code: 'MUM', name: '' },
-        { address: 'Delhi', code: 'DEL', name: '' }
-    ]);
+    let users = useSelector((store:RootState) => store.flightSlice.Airports);
+    
 
     const [showRecommendations1, setShowRecommendations1] = useState(false);
     const searchBarRef1 = useRef<HTMLInputElement | null>(null);
@@ -25,6 +26,10 @@ export default function Home() {
     const searchBarRef2 = useRef<HTMLInputElement | null>(null);
     const recommendationsRef2 = useRef<HTMLInputElement | null>(null);
 
+    const [calendar ,setCalender] = useState(false);
+    const calendarRef1 = useRef<HTMLDivElement | null>(null);
+    const calendarRef2 = useRef<HTMLDivElement | null>(null);
+
     // Show recommendations when the search bar is focused
     const handleFocus1 = () => {
         setShowRecommendations1(true);
@@ -32,12 +37,13 @@ export default function Home() {
     const handleFocus2 = () => {
         setShowRecommendations2(true);
     };
+    // Show calendar when calender bar in focused
+    const calendarFocus2 = () => {
+        setCalender(true);
+    }
 
     // Hide recommendations when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
-        // console.log(event.target);
-        // console.log(searchBarRef.current)
-        // console.log(recommendationsRef.current)
         if (
             searchBarRef1.current &&
             !searchBarRef1.current.contains(event.target as Node) &&
@@ -55,33 +61,23 @@ export default function Home() {
         ) {
             setShowRecommendations2(false);
         }
+
+
+        if (
+            calendarRef1.current &&
+            !calendarRef1.current.contains(event.target as Node) &&
+            calendarRef2.current &&
+            !calendarRef2.current.contains(event.target as Node)
+        ) {
+            setCalender(false);
+        }
     };
 
 
     useEffect(() => {
-
-        async function getData() {
-            try {
-                const response = await axios.get('http://localhost:3000/api/v1/airports/');
-
-                if (response.data.data) {
-                    setUsers(response.data.data);
-                }
-
-            } catch (error) {
-                console.log(error);
-            }
-
-        }
-
-        getData();
-
         setTimeout(() => {
             setIsLoading(false);
-
-
         }, 1000)
-
 
         document.addEventListener('click', handleClickOutside);
         return () => {
@@ -91,10 +87,6 @@ export default function Home() {
 
     const [filterCity1, setFilterCity1] = useState(users);
     const [filterCity2, setFilterCity2] = useState(users);
-
-    const inputRef = useRef<HTMLInputElement | null>(null);
-
-
 
     //dispatching into redux store
     const dispatch = useDispatch();
@@ -106,9 +98,21 @@ export default function Home() {
     const [formData, setFormData] = useState({
         arrival: '',
         destination: "",
-        date: ''
+        date: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
 
-    })
+    });
+   
+
+    function dateConvertorIsoToString(date: Date) {
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed, so add 1
+        const day = String(date.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+
+        return formattedDate;
+    }
 
     //for setting arrival city
     function arrivalData(e: React.ChangeEvent<HTMLInputElement>) {
@@ -145,18 +149,17 @@ export default function Home() {
     }
 
     // for setting date into state
-    function dateData(e: React.ChangeEvent<HTMLInputElement>) {
-        const { name, value } = e.target;
+    function dateData(e: any) {
+        const value = dateConvertorIsoToString(e);
 
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            date: value
         }));
     }
 
     async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        // console.log(formData);
         try {
             const response = await axios.get(`http://localhost:3000/api/v1/flights?trips=${formData.arrival}-${formData.destination}&date=${formData.date}`, {
                 headers: {
@@ -164,7 +167,6 @@ export default function Home() {
                 }
             }
             );
-            //console.log(response.data.data);
             dispatch(setFlightDetails(response.data.data));
             navigate("/flights");
         } catch (error) {
@@ -172,11 +174,6 @@ export default function Home() {
 
         }
 
-    }
-
-
-    function recommandHandler(e: any) {
-        setFlag(!flag);
     }
 
     return (
@@ -229,7 +226,7 @@ export default function Home() {
                                         }
                                     </div>
 
-                                  
+
 
                                     <div>
 
@@ -246,7 +243,7 @@ export default function Home() {
                                         />
 
                                         {
-                                            showRecommendations2 && 
+                                            showRecommendations2 &&
                                             <div ref={recommendationsRef2} className="overflow-y-auto h-40 absolute top-30 z-20">
                                                 <ul className="border-0 border-gray-700  bg-white z-20 rounded-md  ">
                                                     {filterCity2.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between border border-gray-700 rounded-sm"
@@ -270,19 +267,23 @@ export default function Home() {
                                         }
                                     </div>
 
-                                    <div className="p-2">
-
-                                        <input type="date"
-                                            id="date"
-                                            name="date"
-                                            value={formData.date}
-                                            onChange={dateData}
-                                            className="border-slate-500 rounded-md border-2"
-                                            placeholder="arrival airport"
-                                        />
+                                    <div className="">
+                                        <div className="border-black border-2 w-40 h-14 rounded-md"  ref={calendarRef1}  tabIndex={0} onFocus={calendarFocus2}>
+                                            <div className="px-1 items-center text-blue-600 text-sm"><p>Departure</p></div>
+                                            <div className="font-bold items-center text-lg px-6">{formData.date}</div>
+                                        </div>
+                                        {calendar && <div ref={calendarRef2}><Calendar  onChange={dateData} value={formData.date} className="absolute z-30" /> </div>}
                                     </div>
 
-                                    <button className="bg-blue-900 text-md py-1 text-2xl px-8 font-bold text-white rounded-2xl absolute top-40 z-10">Search</button>
+                                    <div className="w-40 h-14">
+                                        <div className="border-black border-2 w-40 h-14 rounded-md" >
+                                            <div className="px-1 items-center text-blue-600 text-sm"><p>Traveller</p></div>
+                                            <div className="font-bold items-center text-lg px-8">1 Traveller</div>
+                                            <select name="" id=""></select>
+                                        </div>
+                                    </div>
+
+                                    <button className="bg-blue-950 text-md py-1 text-2xl px-8 font-bold text-blue-700 rounded-2xl absolute top-40 z-10">Search</button>
                                 </div>
                             </form>
                         </div>
