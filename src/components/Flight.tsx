@@ -12,8 +12,8 @@ export default function Flight() {
     const { curFlightDetails } = useSelector((store: RootState) => store.flightSlice);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
     function dateInNormalFormat(getdata: string) {
-
         return new Date(getdata).toLocaleTimeString('en-US', { hour12: false });
     }
 
@@ -23,18 +23,18 @@ export default function Flight() {
         navigate('/bookings');
     }
     return (
-        <div className="bg-slate-400  bg-blue-950 h-screen w-full ">
+        <div className="bg-slate-200  h-full w-full ">
             <NavBar />
-            <div className="flex sticky top-0  bg-blue-950">
+            <div className="flex h-full sticky top-0   py-20 px-20">
 
 
-                <div className="w-[30%] bg-white p-4  border-black border-2 h-screen " >
-                    <div className="h-full absolute top-16">
+                <div className="w-[40%] bg-white p-4  border-black border-2 h-full p-4" >
+                    <div className="h-full">
                         filter section
                     </div>
                 </div>
 
-                <div className="w-full   flex-col overflow-y-auto">
+                <div className="w-full h-full  flex-col ">
 
                     <div className="bg-white  flex p-2 justify-evenly text-sm border-gray-300 border-2  ">
                         <div className="text-red-700">
@@ -67,7 +67,7 @@ export default function Flight() {
                     
 
 
-                        <div className="bg-blue-950 p-2 h-screen overflow-y-auto">
+                        <div className=" p-2 h-screen overflow-y-auto">
                             {
                                 curFlightDetails.map((flight) => (
                                     <div className="bg-white m-2 flex p-2 justify-evenly rounded-md ">
@@ -81,11 +81,15 @@ export default function Flight() {
 
                                         </div>
                                         <div className="font-bold text-lg py-2">
-                                            {dateInNormalFormat(flight.departureTime)}
+                                           <div> {dateInNormalFormat(flight.departureTime)}</div>
+                                           <div className="text-sm font-normal px-4" >{flight.departureAirportId}</div>
                                         </div>
 
+                                        <div className="font-bold py-3">:</div>
+
                                         <div className="font-bold text-lg py-2">
-                                            {dateInNormalFormat(flight.arrivalTime)}
+                                            <div>{dateInNormalFormat(flight.arrivalTime)}</div>
+                                            <div className="text-sm font-normal px-4">{flight.arrivalAirportId}</div>
                                         </div>
 
                                         <div className="font-bold text-md py-2">

@@ -3,7 +3,7 @@ import { HtmlHTMLAttributes, useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFlightDetails } from "../redux/flightSlice";
+import { setFlightDetails, setNoOfSeats } from "../redux/flightSlice";
 import Loading from "./Loading";
 import NavBar from "./NavBar";
 import { TextField } from "@mui/material";
@@ -15,8 +15,8 @@ export default function Home() {
     useAirports();
     const [isLoading, setIsLoading] = useState(true);
     const [flag, setFlag] = useState(true);
-    let users = useSelector((store:RootState) => store.flightSlice.Airports);
-    
+    let users = useSelector((store: RootState) => store.flightSlice.Airports);
+
 
     const [showRecommendations1, setShowRecommendations1] = useState(false);
     const searchBarRef1 = useRef<HTMLInputElement | null>(null);
@@ -26,9 +26,13 @@ export default function Home() {
     const searchBarRef2 = useRef<HTMLInputElement | null>(null);
     const recommendationsRef2 = useRef<HTMLInputElement | null>(null);
 
-    const [calendar ,setCalender] = useState(false);
+    const [calendar, setCalender] = useState(false);
     const calendarRef1 = useRef<HTMLDivElement | null>(null);
     const calendarRef2 = useRef<HTMLDivElement | null>(null);
+
+    const [seat, setSeat] = useState(false);
+    const seatRef1 = useRef<HTMLDivElement | null>(null);
+    const seatRef2 = useRef<HTMLDivElement | null>(null);
 
     // Show recommendations when the search bar is focused
     const handleFocus1 = () => {
@@ -40,6 +44,9 @@ export default function Home() {
     // Show calendar when calender bar in focused
     const calendarFocus2 = () => {
         setCalender(true);
+    }
+    const seatFocus2 = () => {
+        setSeat(true);
     }
 
     // Hide recommendations when clicking outside
@@ -71,6 +78,15 @@ export default function Home() {
         ) {
             setCalender(false);
         }
+
+        if (
+            seatRef1.current &&
+            !seatRef1.current.contains(event.target as Node) &&
+            seatRef2.current &&
+            !seatRef2.current.contains(event.target as Node)
+        ) {
+            setSeat(false);
+        }
     };
 
 
@@ -98,10 +114,10 @@ export default function Home() {
     const [formData, setFormData] = useState({
         arrival: '',
         destination: "",
-        date: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
-
+        date: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
+        noOfSeats: 1
     });
-   
+
 
     function dateConvertorIsoToString(date: Date) {
 
@@ -147,6 +163,16 @@ export default function Home() {
             [name]: value
         }));
     }
+    function noOfSeatsHandler(e : React.ChangeEvent<HTMLInputElement>) {
+        const {name , value} =e.target;
+
+
+        setFormData((prevData) => ({
+            ...prevData,
+            [name] : value
+        }));
+    }
+
 
     // for setting date into state
     function dateData(e: any) {
@@ -167,6 +193,7 @@ export default function Home() {
                 }
             }
             );
+            dispatch(setNoOfSeats(formData.noOfSeats));
             dispatch(setFlightDetails(response.data.data));
             navigate("/flights");
         } catch (error) {
@@ -268,19 +295,29 @@ export default function Home() {
                                     </div>
 
                                     <div className="">
-                                        <div className="border-black border-2 w-40 h-14 rounded-md"  ref={calendarRef1}  tabIndex={0} onFocus={calendarFocus2}>
+                                        <div className="border-black border-2 w-40 h-14 rounded-md" ref={calendarRef1} tabIndex={0} onFocus={calendarFocus2}>
                                             <div className="px-1 items-center text-blue-600 text-sm"><p>Departure</p></div>
                                             <div className="font-bold items-center text-lg px-6">{formData.date}</div>
                                         </div>
-                                        {calendar && <div ref={calendarRef2}><Calendar  onChange={dateData} value={formData.date} className="absolute z-30" /> </div>}
+                                        {calendar && <div ref={calendarRef2}><Calendar onChange={dateData} value={formData.date} className="absolute z-30" /> </div>}
                                     </div>
 
                                     <div className="w-40 h-14">
-                                        <div className="border-black border-2 w-40 h-14 rounded-md" >
+                                        <div className="border-black border-2 w-40 h-14 rounded-md" ref={seatRef1} tabIndex={0} onFocus={seatFocus2}>
                                             <div className="px-1 items-center text-blue-600 text-sm"><p>Traveller</p></div>
-                                            <div className="font-bold items-center text-lg px-8">1 Traveller</div>
-                                            <select name="" id=""></select>
+                                            <div className="font-bold items-center text-lg px-8">{formData.noOfSeats} Traveller</div>
                                         </div>
+                                        {seat && <div className='border-2  w-[100%]' ref={seatRef2}>
+                                            <input type="number"
+                                                placeholder="  no of seats"
+                                                name='noOfSeats'
+                                                value={formData.noOfSeats}
+                                                onChange={noOfSeatsHandler}
+                                                className="w-full border-2 border-black"
+                                                min={1}
+                                            />
+                                        </div>
+                                        }
                                     </div>
 
                                     <button className="bg-blue-950 text-md py-1 text-2xl px-8 font-bold text-blue-700 rounded-2xl absolute top-40 z-10">Search</button>

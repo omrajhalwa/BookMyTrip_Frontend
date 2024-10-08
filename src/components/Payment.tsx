@@ -19,14 +19,6 @@ import NavBar from "./NavBar";
 
 export default function Payment() {
 
-    const [isLoading, setIsLoading] = useState(true);
-
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 5000)
-    }, [])
 
     const { bookingTransaction } = useSelector((store: RootState) => store.userSlice);
     const navigate = useNavigate();
@@ -64,7 +56,7 @@ export default function Payment() {
 
         <><NavBar/>
             {
-                isLoading ? (<BookingLoading />) : (
+                 (
 
                     <div className="flex justify-center">
 

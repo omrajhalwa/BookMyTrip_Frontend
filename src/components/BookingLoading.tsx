@@ -12,7 +12,6 @@ export default function Loading(isLoading: any) {
                 </div>
                 <div className='p-2 ml-4'>
                     <BarLoader color={"#123abc"} className='font-extrabold ml-16' loading={isLoading} width={300} height={20} />
-
                 </div>
 
 
