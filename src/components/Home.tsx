@@ -11,6 +11,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import useAirports from "../hooks/useAirports";
 import { RootState } from "../redux/store";
+import Footer from "./Footer";
 export default function Home() {
     useAirports();
     const [isLoading, setIsLoading] = useState(true);
@@ -325,6 +326,7 @@ export default function Home() {
                             </form>
                         </div>
                     </div>
+                    <Footer/>
                 </>
             )}
         </div>

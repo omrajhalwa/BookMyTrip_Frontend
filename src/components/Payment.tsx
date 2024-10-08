@@ -54,40 +54,41 @@ export default function Payment() {
 
     return (
 
-        <><NavBar/>
+        <div className="h-screen w-full overflow-hidden">
+            <NavBar/>
             {
                  (
 
-                    <div className="flex justify-center">
+                    <div className="flex justify-center bg-gray-300 w-full h-full px-6">
 
 
-                        <div className="">
+                        <div className="bg-white px-32 py-6 h-[70%] rounded-lg mt-10">
 
-                            <div className="font-bold text-4xl">
-                                payment
+                            <div className="font-bold text-4xl items-center mx-auto mt-2 flex justify-center">
+                                <p>Payment</p>
                             </div>
 
-                            <div>
+                            <div className="mt-4">
                                 <form onSubmit={submitHandler}>
-                                    <div>
+                                    <div className="font-bold border-2 border-black p-1">
                                         Booking Status - {bookingTransaction.status}
                                     </div>
-                                    <div>
+                                    <div className="font-bold border-2 border-black p-1">
                                         Booking Id   - {bookingTransaction.id}
                                     </div>
-                                    <div>
-                                        flightId -{bookingTransaction.flightId}
+                                    <div className="font-bold border-2 border-black p-1">
+                                        FlightId - {bookingTransaction.flightId}
                                     </div>
-                                    <div>
-                                        userId - {bookingTransaction.userId}
-                                    </div>
-
-                                    <div>
-                                        totalCost - {bookingTransaction.totalCost}
+                                    <div className="font-bold border-2 border-black p-1">
+                                        UserId - {bookingTransaction.userId}
                                     </div>
 
-                                    <div>
-                                        <button className="bg-blue-500 px-6 py-1 text-white rounded-md">pay</button>
+                                    <div className="font-bold border-2 border-black p-1">
+                                        TotalCost - {bookingTransaction.totalCost}
+                                    </div>
+
+                                    <div className="flex justify-center mt-4">
+                                        <button className="bg-blue-500 px-6 py-1 text-white rounded-md">Make payment</button>
                                     </div>
                                 </form>
                             </div>
@@ -95,7 +96,7 @@ export default function Payment() {
                     </div>
                 )
             }
-        </>
+        </div>
 
     )
 }

@@ -12,7 +12,7 @@ export default function Flight() {
     const { curFlightDetails } = useSelector((store: RootState) => store.flightSlice);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     function dateInNormalFormat(getdata: string) {
         return new Date(getdata).toLocaleTimeString('en-US', { hour12: false });
     }
@@ -25,14 +25,7 @@ export default function Flight() {
     return (
         <div className="bg-slate-200  h-full w-full ">
             <NavBar />
-            <div className="flex h-full sticky top-0   py-20 px-20">
-
-
-                <div className="w-[40%] bg-white p-4  border-black border-2 h-full p-4" >
-                    <div className="h-full">
-                        filter section
-                    </div>
-                </div>
+            <div className="flex h-full sticky top-0  w-[100%] px-40">
 
                 <div className="w-full h-full  flex-col ">
 

@@ -5,6 +5,7 @@ import Login from './Login';
 import Payment from './Payment';
 import Booking from './Booking';
 import PaymentDone from './PaymentDone';
+import Loading from './Loading';
 
 
 export default function Body() {
@@ -33,6 +34,9 @@ export default function Body() {
         }, {
             path: '/payment/transaction',
             element: <PaymentDone />
+        },{
+            path:'/loading',
+            element:<Loading/>
         }
     ])
 
