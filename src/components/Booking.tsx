@@ -21,7 +21,7 @@ export default function Booking() {
 
 
     useEffect(() => {
-        if (!user.id) {
+        if (!user.email) {
             navigate('/login');
         }
 

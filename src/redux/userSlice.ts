@@ -3,12 +3,14 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface CounterState {
   user: any
-  , bookingTransaction: any
+  , bookingTransaction: any,
+  firebase : boolean
 }
 
 const initialState: CounterState = {
   user: {},
-  bookingTransaction: {}
+  bookingTransaction: {},
+  firebase:false
 }
 
 export const userSlice = createSlice({
@@ -21,11 +23,14 @@ export const userSlice = createSlice({
 
     setBookingTransaction: (state, action) => {
       state.bookingTransaction = action.payload
+    },
+    setFirebase : (state, action) => {
+      state.firebase = action.payload
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, setBookingTransaction } = userSlice.actions;
+export const { setUser, setBookingTransaction ,setFirebase} = userSlice.actions;
 
 export default userSlice.reducer;
