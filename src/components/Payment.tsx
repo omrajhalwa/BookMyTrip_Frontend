@@ -55,48 +55,42 @@ export default function Payment() {
     return (
 
         <div className="h-screen w-full overflow-hidden">
-            <NavBar/>
-            {
-                 (
-
-                    <div className="flex justify-center bg-gray-300 w-full h-full px-6">
-
-
-                        <div className="bg-white px-32 py-6 h-[70%] rounded-lg mt-10">
-
-                            <div className="font-bold text-4xl items-center mx-auto mt-2 flex justify-center">
-                                <p>Payment</p>
-                            </div>
-
-                            <div className="mt-4">
-                                <form onSubmit={submitHandler}>
-                                    <div className="font-bold border-2 border-black p-1">
-                                        Booking Status - {bookingTransaction.status}
-                                    </div>
-                                    <div className="font-bold border-2 border-black p-1">
-                                        Booking Id   - {bookingTransaction.id}
-                                    </div>
-                                    <div className="font-bold border-2 border-black p-1">
-                                        FlightId - {bookingTransaction.flightId}
-                                    </div>
-                                    <div className="font-bold border-2 border-black p-1">
-                                        UserId - {bookingTransaction.userId}
-                                    </div>
-
-                                    <div className="font-bold border-2 border-black p-1">
-                                        TotalCost - {bookingTransaction.totalCost}
-                                    </div>
-
-                                    <div className="flex justify-center mt-4">
-                                        <button className="bg-blue-500 px-6 py-1 text-white rounded-md">Make payment</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+            <NavBar />
+            <div className="flex justify-center bg-gray-300 w-full h-full px-4 sm:px-6">
+                <div className="bg-white px-6 sm:px-12 lg:px-32 py-6 h-auto sm:h-[70%] rounded-lg mt-10 w-full max-w-xl lg:max-w-3xl">
+                    <div className="font-bold text-2xl sm:text-3xl lg:text-4xl items-center mx-auto flex justify-center">
+                        <p>Payment</p>
                     </div>
-                )
-            }
+
+                    <div className="mt-4">
+                        <form onSubmit={submitHandler}>
+                            <div className="font-bold border-2 border-black p-2 text-sm sm:text-md lg:text-lg">
+                                Booking Status - {bookingTransaction.status}
+                            </div>
+                            <div className="font-bold border-2 border-black p-2 text-sm sm:text-md lg:text-lg">
+                                Booking Id - {bookingTransaction.id}
+                            </div>
+                            <div className="font-bold border-2 border-black p-2 text-sm sm:text-md lg:text-lg">
+                                Flight Id - {bookingTransaction.flightId}
+                            </div>
+                            <div className="font-bold border-2 border-black p-2 text-sm sm:text-md lg:text-lg">
+                                User Id - {bookingTransaction.userId}
+                            </div>
+                            <div className="font-bold border-2 border-black p-2 text-sm sm:text-md lg:text-lg">
+                                Total Cost - {bookingTransaction.totalCost}
+                            </div>
+
+                            <div className="flex justify-center mt-4">
+                                <button className="bg-blue-500 px-4 sm:px-6 py-2 text-white rounded-md text-sm sm:text-md">
+                                    Make Payment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
 
     )
 }

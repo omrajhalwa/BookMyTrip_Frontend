@@ -23,8 +23,8 @@ import { RootState } from "../redux/store";
 export default function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('mohit@gmail.com');
+    const [password, setPassword] = useState('12345');
     const [login, setLogin] = useState(true);
     const {firebase} = useSelector((store :RootState) => store.userSlice);
    
@@ -113,53 +113,78 @@ const auth = getAuth();
 
     return (
 
-        <div className='flex justify-center w-full h-screen  bg-black  py-10'>
-
-            <form onSubmit={submitHandler} className="w-full flex justify-center">
-                <div className=' bg-slate-950 border-white border-2  justify-center rounded-lg w-[28%]'>
-
-                    {/* <motion.div animate={{ x: 100 }} /> */}
-                    <div className='text-4xl text-blue-700 font-bold my-10 flex justify-center'>
-                        <div>{login ? "Log In" : "Sign Up"}</div>
-                    </div>
-
-                    <div className="flex justify-center ">
-                        <div className=' m-2 rounded-lg w-[60%]'>
-                            <input type="text"
-                                placeholder="   email"
-                                name="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className=' w-full rounded-lg'
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex justify-center mt-2">
-                        <div className=' m-2 rounded-md w-[60%]'>
-                            <input type="password"
-                                placeholder="   password"
-                                name="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className=' w-full rounded-lg'
-                            />
-                        </div>
-                    </div>
-
-                    <div className='flex justify-center mt-2'>
-                        <button className='px-4 py-2 bg-blue-700 rounded-md text-white'>{login ? "Log in" : "Sign Up"}</button>
-                        
-                    </div>
-
-                    <div className="py-2">
-                        <div className="text-white flex px-8 text-sm py-2"><div> {login ? "Don't" : "Already,"} have an account ?  </div><div className="text-blue-700 px-2" onClick={() => setLogin(!login)}>{login ? " SignUp" : " Login"}</div></div>
-                    </div>
-                   <div className="flex justify-center py-4"><div className="bg-white p-2 flex justify-center w-[60%] rounded-lg" onClick={signInWithGoogle}><FcGoogle className="text-2xl mr-2" /> <div>Google</div></div></div> 
-                </div>
-            </form>
-
-            
-        </div>
+        <div className="flex justify-center items-center w-full min-h-screen bg-black py-10 px-2">
+        <form onSubmit={submitHandler} className="w-full flex justify-center">
+          <div className="bg-slate-950 border-white border-2 rounded-lg w-full max-w-md p-8 sm:w-[70%] md:w-[40%] lg:w-[28%]">
+      
+            {/* Title */}
+            <div className="text-3xl sm:text-4xl text-blue-700 font-bold my-6 flex justify-center">
+              {login ? "Log In" : "Sign Up"}
+            </div>
+      
+            {/* Email Input */}
+            <div className="flex justify-center">
+              <div className="w-full sm:w-[80%]">
+                <input
+                  type="text"
+                  placeholder="Email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+      
+            {/* Password Input */}
+            <div className="flex justify-center mt-4">
+              <div className="w-full sm:w-[80%]">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+      
+            {/* Submit Button */}
+            <div className="flex justify-center mt-6">
+              <button
+                type="submit"
+                className="px-6 py-3 bg-blue-700 rounded-md text-white hover:bg-blue-800 transition-all duration-200 ease-in-out"
+              >
+                {login ? "Log In" : "Sign Up"}
+              </button>
+            </div>
+      
+            {/* Toggle Between Log In / Sign Up */}
+            <div className="text-white text-center py-4">
+              <span>{login ? "Don't" : "Already,"} have an account?</span>
+              <span
+                className="text-blue-700 ml-2 cursor-pointer"
+                onClick={() => setLogin(!login)}
+              >
+                {login ? " Sign Up" : " Log In"}
+              </span>
+            </div>
+      
+            {/* Google Sign In */}
+            <div className="flex justify-center mt-4">
+              <div
+                className="bg-white text-black p-3 flex items-center justify-center w-full sm:w-[80%] rounded-lg cursor-pointer hover:bg-gray-100 transition-all duration-200 ease-in-out"
+                onClick={signInWithGoogle}
+              >
+                <FcGoogle className="text-2xl mr-2" />
+                <span>Google</span>
+              </div>
+            </div>
+      
+          </div>
+        </form>
+      </div>
+      
     )
 }

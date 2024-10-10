@@ -113,8 +113,8 @@ export default function Home() {
 
     //whole form info in single object
     const [formData, setFormData] = useState({
-        arrival: '',
-        destination: "",
+        arrival: 'MUM',
+        destination: "DEL",
         date: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
         noOfSeats: 1
     });
@@ -164,13 +164,13 @@ export default function Home() {
             [name]: value
         }));
     }
-    function noOfSeatsHandler(e : React.ChangeEvent<HTMLInputElement>) {
-        const {name , value} =e.target;
+    function noOfSeatsHandler(e: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value } = e.target;
 
 
         setFormData((prevData) => ({
             ...prevData,
-            [name] : value
+            [name]: value
         }));
     }
 
@@ -206,58 +206,63 @@ export default function Home() {
 
     return (
 
-        <div >
-            {isLoading ? (<Loading isLoading={isLoading} />) : (
-                <>
+        <div className="bg-blue-600 h-full">
+            {isLoading ? (
+                <Loading isLoading={isLoading} />
+            ) : (
+                <div className="bg-blue-600 h-full">
                     <NavBar />
-                    <div className="w-full h-72 bg-blue-400 flex ">
-                        <img className="w-full h-full" src="https://images.unsplash.com/photo-1726910133626-9b573eca70ff?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
-                        <div className="w-[90%] h-[40%] bg-white rounded-md absolute ml-14 my-12">
+                    <div className="w-full h-screen bg-slate-900 relative flex">
+
+
+                        {/* Form container */}
+                        <div className="w-[90%] h-auto bg-white rounded-md absolute left-[5%] top-10 p-6 shadow-lg z-20">
                             <form onSubmit={submitHandler}>
-                                <div className="flex py-16 justify-evenly">
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-8 bg-white">
 
-
-                                    <div className="child-div " >
+                                    {/* From Input */}
+                                    <div className="w-full">
                                         <TextField
                                             ref={searchBarRef1}
                                             onFocus={handleFocus1}
-                                            name='arrival'
-                                            id="outlined-basic"
+                                            name="arrival"
                                             label="From"
                                             value={formData.arrival}
                                             variant="outlined"
                                             onChange={arrivalData}
-                                            className="w-[80%]"
-
+                                            className="w-full"
                                         />
-                                        {
-                                            showRecommendations1 && <div ref={recommendationsRef1} className="overflow-y-auto h-40">
-                                                <ul className="border-0 border-gray-700  bg-white z-100 rounded-md">
-                                                    {filterCity1.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between border border-gray-700 rounded-sm"
-                                                        onClick={() => {
-                                                            setFormData((prevData) => ({
-                                                                ...prevData,
-                                                                "arrival": user.code
-                                                            }));
-
-                                                        }}
-                                                    >    <div>
-                                                            <div>{user.address}</div>
-                                                            <div className="text-sm text-gray-500">{user.name}</div>
-                                                        </div>
-                                                        <div className="font-bold text-sm pt-2">
-                                                            {user.code}
-                                                        </div>
-                                                    </li>)}
+                                        {showRecommendations1 && (
+                                            <div
+                                                ref={recommendationsRef1}
+                                                className="overflow-y-auto h-40 absolute top-25 bg-white z-50 rounded-md shadow-md mt-2 w-[80%] md:w-[23%]"
+                                            >
+                                                <ul className="border border-gray-300">
+                                                    {filterCity1.map((user) => (
+                                                        <li
+                                                            key={user.code}
+                                                            className="hover:bg-gray-200 px-4 py-1 flex justify-between border-b border-gray-300 cursor-pointer"
+                                                            onClick={() => {
+                                                                setFormData((prevData) => ({
+                                                                    ...prevData,
+                                                                    arrival: user.code,
+                                                                }));
+                                                            }}
+                                                        >
+                                                            <div>
+                                                                <div>{user.address}</div>
+                                                                <div className="text-sm text-gray-500">{user.name}</div>
+                                                            </div>
+                                                            <div className="font-bold text-sm pt-2">{user.code}</div>
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </div>
-                                        }
+                                        )}
                                     </div>
 
-
-
-                                    <div>
-
+                                    {/* To Input */}
+                                    <div className="w-full">
                                         <TextField
                                             id="destination"
                                             label="To"
@@ -265,71 +270,106 @@ export default function Home() {
                                             value={formData.destination}
                                             onChange={destinationData}
                                             variant="outlined"
-                                            className="w-[80%] font-bold"
+                                            className="w-full font-bold"
                                             ref={searchBarRef2}
                                             onFocus={handleFocus2}
                                         />
-
-                                        {
-                                            showRecommendations2 &&
-                                            <div ref={recommendationsRef2} className="overflow-y-auto h-40 absolute top-30 z-20">
-                                                <ul className="border-0 border-gray-700  bg-white z-20 rounded-md  ">
-                                                    {filterCity2.map((user) => <li className="hover:bg-gray-200 px-4 py-1 flex justify-between border border-gray-700 rounded-sm"
-                                                        onClick={() => {
-                                                            setFormData((prevData) => ({
-                                                                ...prevData,
-                                                                "destination": user.code
-                                                            }));
-
-                                                        }}>
-                                                        <div>
-                                                            <div>{user.address}</div>
-                                                            <div className="text-sm text-gray-500">{user.name}</div>
-                                                        </div>
-                                                        <div className="font-bold text-sm pt-2">
-                                                            {user.code}
-                                                        </div>
-                                                    </li>)}
+                                        {showRecommendations2 && (
+                                            <div
+                                                ref={recommendationsRef2}
+                                                className="overflow-y-auto h-40 absolute top-25 bg-white z-50 rounded-md shadow-md mt-2 w-[80%] md:w-[23%]"
+                                            >
+                                                <ul className="border border-gray-300">
+                                                    {filterCity2.map((user) => (
+                                                        <li
+                                                            key={user.code}
+                                                            className="hover:bg-gray-200 px-4 py-1 flex justify-between border-b border-gray-300 cursor-pointer"
+                                                            onClick={() => {
+                                                                setFormData((prevData) => ({
+                                                                    ...prevData,
+                                                                    destination: user.code,
+                                                                }));
+                                                            }}
+                                                        >
+                                                            <div>
+                                                                <div>{user.address}</div>
+                                                                <div className="text-sm text-gray-500">{user.name}</div>
+                                                            </div>
+                                                            <div className="font-bold text-sm pt-2">{user.code}</div>
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </div>
-                                        }
+                                        )}
                                     </div>
 
-                                    <div className="">
-                                        <div className="border-black border-2 w-40 h-14 rounded-md" ref={calendarRef1} tabIndex={0} onFocus={calendarFocus2}>
-                                            <div className="px-1 items-center text-blue-600 text-sm"><p>Departure</p></div>
-                                            <div className="font-bold items-center text-lg px-6">{formData.date}</div>
+                                    {/* Date Picker */}
+                                    <div className="w-full">
+                                        <div
+                                            className="border-black border-2 w-full h-14 rounded-md flex items-center px-4"
+                                            ref={calendarRef1}
+                                            tabIndex={0}
+                                            onFocus={calendarFocus2}
+                                        >
+                                            <div className="text-blue-600 text-sm">
+                                                <p>Departure</p>
+                                            </div>
+                                            <div className="font-bold text-lg ml-auto">{formData.date}</div>
                                         </div>
-                                        {calendar && <div ref={calendarRef2}><Calendar onChange={dateData} value={formData.date} className="absolute z-30" /> </div>}
+                                        {calendar && (
+                                            <div ref={calendarRef2} className="absolute z-30 text-sm w-[90%] md:w-[100%] lg:w-[100%]">
+                                                <Calendar onChange={dateData} value={formData.date} />
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <div className="w-40 h-14">
-                                        <div className="border-black border-2 w-40 h-14 rounded-md" ref={seatRef1} tabIndex={0} onFocus={seatFocus2}>
-                                            <div className="px-1 items-center text-blue-600 text-sm"><p>Traveller</p></div>
-                                            <div className="font-bold items-center text-lg px-8">{formData.noOfSeats} Traveller</div>
+                                    {/* Traveller Input */}
+                                    <div className="w-full">
+                                        <div
+                                            className="border-black border-2 w-full h-14 rounded-md flex items-center px-4"
+                                            ref={seatRef1}
+                                            tabIndex={0}
+                                            onFocus={seatFocus2}
+                                        >
+                                            <div className="text-blue-600 text-sm">
+                                                <p>Traveller</p>
+                                            </div>
+                                            <div className="font-bold text-lg ml-auto">{formData.noOfSeats} Traveller</div>
                                         </div>
-                                        {seat && <div className='border-2  w-[100%]' ref={seatRef2}>
-                                            <input type="number"
-                                                placeholder="  no of seats"
-                                                name='noOfSeats'
-                                                value={formData.noOfSeats}
-                                                onChange={noOfSeatsHandler}
-                                                className="w-full border-2 border-black"
-                                                min={1}
-                                            />
-                                        </div>
-                                        }
+                                        {seat && (
+                                            <div className="border-2 w-[80%] md:w-[90%] lg:w-[100%] mt-2 absolute" ref={seatRef2}>
+                                                <input
+                                                    type="number"
+                                                    placeholder="No of seats"
+                                                    name="noOfSeats"
+                                                    value={formData.noOfSeats}
+                                                    onChange={noOfSeatsHandler}
+                                                    className="w-full border-2 border-black p-2"
+                                                    min={1}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <button className="bg-blue-950 text-md py-1 text-2xl px-8 font-bold text-blue-700 rounded-2xl absolute top-40 z-10">Search</button>
+                                   
+                                
+                                </div>
+                                <div>
+                                     {/* Search Button */}
+                                    <div className="w-full flex justify-center ">
+                                        <button className="bg-blue-950 text-lg py-4 px-8 font-bold text-white rounded-2xl">
+                                            Search
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <Footer/>
-                </>
+
+                </div>
             )}
         </div>
+
 
     )
 }
