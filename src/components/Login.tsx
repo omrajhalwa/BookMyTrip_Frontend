@@ -59,7 +59,7 @@ const auth = getAuth();
 
             const idToken = await result.user.getIdToken(true);
             //setup firebase token in cookie
-            document.cookie=`firebase_token=${idToken};secure=true;Path=/`;
+            document.cookie=`firebase_token=${idToken};secure=true;SameSite=None;Path=/`;
             // firebase id of user
             const uid : number = (+user.providerData[0].uid % 1e9);
 
