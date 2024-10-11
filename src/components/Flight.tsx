@@ -17,8 +17,8 @@ export default function Flight() {
         return new Date(getdata).toLocaleTimeString('en-US', { hour12: false });
     }
 
-    function bookingHandler(flightId: string, flightPrice: Number) {
-        console.log(flightPrice);
+    function bookingHandler(flightId: number, flightPrice: number) {
+        console.log(flightId);
         dispatch(setSelectedFlight(flightId));
         navigate('/bookings');
     }

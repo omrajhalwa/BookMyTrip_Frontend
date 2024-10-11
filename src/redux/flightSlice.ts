@@ -3,9 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface CounterState {
   curFlightDetails: Array<any>,
-  selectedFlight: Number,
+  selectedFlight: number,
   Airports:Array<any>
-  noOfSeats: Number
+  noOfSeats: number
   
 
 }

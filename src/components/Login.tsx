@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFirebase, setUser } from '../redux/userSlice';
 import { FcGoogle } from "react-icons/fc";
 import { RootState } from "../redux/store";
+import { BACKEND_URL } from "../utils/constant";
 
 
 
@@ -23,9 +24,9 @@ import { RootState } from "../redux/store";
 export default function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [email, setEmail] = useState('mohit@gmail.com');
-    const [password, setPassword] = useState('12345');
-    const [login, setLogin] = useState(true);
+    const [email, setEmail] = useState<string>('omraj72470@gmail.com');
+    const [password, setPassword] = useState<string>('12345');
+    const [login, setLogin] = useState<boolean>(true);
     const {firebase} = useSelector((store :RootState) => store.userSlice);
    
 
@@ -58,9 +59,9 @@ const auth = getAuth();
 
             const idToken = await result.user.getIdToken(true);
             //setup firebase token in cookie
-            document.cookie=`firebase_token=${idToken};Secure;SameSite=Strict;Path=/`;
+            document.cookie=`firebase_token=${idToken};secure=true;Path=/`;
             // firebase id of user
-            const uid = (+user.providerData[0].uid % 1e9);
+            const uid : number = (+user.providerData[0].uid % 1e9);
 
             dispatch(setUser({email:user.providerData[0].email,id:uid}));
             dispatch(setFirebase(!firebase));
@@ -89,7 +90,7 @@ const auth = getAuth();
     async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3001/api/v1/user/${login ? "signin" : "signup"}`, {
+            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${login ? "signin" : "signup"}`, {
                 email,
                 password
             }, {
@@ -98,7 +99,7 @@ const auth = getAuth();
                 },
                 withCredentials: true
             })
-            
+            console.log(response);
             if(login){
             console.log(response.data);
             dispatch(setUser(response.data));

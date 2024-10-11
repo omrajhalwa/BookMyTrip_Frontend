@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import BookingLoading from './BookingLoading'
 import NavBar from "./NavBar";
+import { BACKEND_URL } from "../utils/constant";
 
 
 
@@ -29,7 +30,7 @@ export default function Payment() {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3001/bookingService/api/v1/bookings/payments', {
+            const response = await axios.post(`${BACKEND_URL}/bookingService/api/v1/bookings/payments`, {
                 bookingId: bookingTransaction.id,
                 userId: bookingTransaction.userId,
                 totalCost: bookingTransaction.totalCost
@@ -42,7 +43,7 @@ export default function Payment() {
                 withCredentials: true
             })
 
-            console.log(response.data);
+           console.log(response);
 
             if (response.data.success) {
                 navigate('/payment/transaction');

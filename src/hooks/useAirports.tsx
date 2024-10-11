@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import axios from 'axios';
 import { setAirports } from "../redux/flightSlice";
 import { useDispatch } from "react-redux";
+import { BACKEND_URL } from "../utils/constant";
 
 
 
@@ -13,7 +14,7 @@ export default function useAirports() {
 
         async function getData() {
             try {
-                const response = await axios.get('http://localhost:3000/api/v1/airports/');
+                const response = await axios.get(`${BACKEND_URL}/flightsService/api/v1/airports/`);
 
                 if (response.data.data) {
                     dispatch(setAirports(response.data.data));

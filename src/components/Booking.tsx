@@ -5,6 +5,7 @@ import { RootState } from "../redux/store";
 import axios from 'axios';
 import { setBookingTransaction } from '../redux/userSlice';
 import BookingLoading from './BookingLoading'
+import { BACKEND_URL } from '../utils/constant';
 
 
 
@@ -28,8 +29,8 @@ export default function Booking() {
         async function booking() {
 
             try {
-
-                const response = await axios.post('http://localhost:3001/bookingService/api/v1/bookings/', {
+                  
+                const response = await axios.post(`${BACKEND_URL}/bookingService/api/v1/bookings/`, {
                     flightId,
                     userId: user.id,
                     noOfSeats
@@ -39,16 +40,18 @@ export default function Booking() {
                     },
                     withCredentials: true
                 });
-
-               // console.log(response);
+        
+                console.log('hello')
+                console.log(response);
                 dispatch(setBookingTransaction(response.data.data));
                 navigate('/payment');
             } catch (error) {
                 console.log(error);
+                navigate('/');
             }
         }
 
-        booking();
+     booking();
     }, []);
 
 

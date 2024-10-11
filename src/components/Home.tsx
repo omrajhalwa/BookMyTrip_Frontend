@@ -12,10 +12,11 @@ import 'react-calendar/dist/Calendar.css';
 import useAirports from "../hooks/useAirports";
 import { RootState } from "../redux/store";
 import Footer from "./Footer";
+import { BACKEND_URL } from "../utils/constant";
 export default function Home() {
     useAirports();
-    const [isLoading, setIsLoading] = useState(true);
-    const [flag, setFlag] = useState(true);
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     let users = useSelector((store: RootState) => store.flightSlice.Airports);
 
 
@@ -112,7 +113,14 @@ export default function Home() {
     const navigate = useNavigate();
 
     //whole form info in single object
-    const [formData, setFormData] = useState({
+   interface bookingForm {
+     arrival :string,
+     destination:string,
+     date:string,
+     noOfSeats:number
+   }
+
+    const [formData, setFormData] = useState<bookingForm>({
         arrival: 'MUM',
         destination: "DEL",
         date: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
@@ -122,25 +130,25 @@ export default function Home() {
 
     function dateConvertorIsoToString(date: Date) {
 
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed, so add 1
-        const day = String(date.getDate()).padStart(2, '0');
+        const year : number = date.getFullYear();
+        const month : string = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed, so add 1
+        const day : string = String(date.getDate()).padStart(2, '0');
 
-        const formattedDate = `${year}-${month}-${day}`;
+        const formattedDate : string = `${year}-${month}-${day}`;
 
         return formattedDate;
     }
 
     //for setting arrival city
     function arrivalData(e: React.ChangeEvent<HTMLInputElement>) {
-        //console.log(e.target);
+  
         const { name, value } = e.target;
-        //console.log(value);
-        const searchCity = value;
 
-        const filterItems = users.filter((user) =>
+        const searchCity : string = value;
+
+        const filterItems : Array<bookingForm> = users.filter((user) =>
             user.address.toLowerCase().includes(searchCity.toLowerCase()));
-        //console.log(filterItems)
+  
         setFilterCity1(filterItems);
 
         setFormData((prevData) => ({
@@ -153,9 +161,9 @@ export default function Home() {
     function destinationData(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
 
-        const searchCity = value;
+        const searchCity : string = value;
 
-        const filterItems = users.filter((user) =>
+        const filterItems : Array<bookingForm> = users.filter((user) =>
             user.address.toLowerCase().includes(searchCity.toLowerCase()));
         setFilterCity2(filterItems);
 
@@ -177,7 +185,7 @@ export default function Home() {
 
     // for setting date into state
     function dateData(e: any) {
-        const value = dateConvertorIsoToString(e);
+        const value : string = dateConvertorIsoToString(e);
 
         setFormData((prevData) => ({
             ...prevData,
@@ -188,12 +196,13 @@ export default function Home() {
     async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
-            const response = await axios.get(`http://localhost:3000/api/v1/flights?trips=${formData.arrival}-${formData.destination}&date=${formData.date}`, {
+            const response = await axios.get(`${BACKEND_URL}/flightsService/api/v1/flights?trips=${formData.arrival}-${formData.destination}&date=${formData.date}`, {
                 headers: {
                     'Content-Type': 'application/json', // Set Content-Type header
                 }
             }
             );
+            console.log(response);
             dispatch(setNoOfSeats(formData.noOfSeats));
             dispatch(setFlightDetails(response.data.data));
             navigate("/flights");

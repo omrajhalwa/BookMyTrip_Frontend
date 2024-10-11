@@ -15,7 +15,7 @@ export default function Parent() {
     const user = useSelector((store: RootState) => store.userSlice.user);
 
     useEffect(() => {
-        console.log(user);
+    
         if (!user.email) {
             navigate('/login');
         }

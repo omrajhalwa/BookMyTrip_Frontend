@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFirebase, setUser } from '../redux/userSlice';
 import { RootState } from "../redux/store";
 import { getAuth, signOut } from "firebase/auth";
+import { BACKEND_URL } from '../utils/constant';
 export default function NavBar() {
 
     const navigate = useNavigate();
@@ -15,8 +16,8 @@ export default function NavBar() {
     async function logoutHandler() {
         async function jwtLogout() {
             try {
-                const response = await axios.get('http://localhost:3001/api/v1/user/signout');
-                console.log(response);
+                const response = await axios.get(`${BACKEND_URL}/api/v1/user/signout`);
+              
 
                 dispatch(setUser({}));
                 navigate('/login');
