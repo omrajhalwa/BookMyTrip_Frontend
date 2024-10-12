@@ -59,7 +59,21 @@ const auth = getAuth();
 
             const idToken = await result.user.getIdToken(true);
             //setup firebase token in cookie
-            document.cookie = `firebase_token=${idToken}; Secure; SameSite=None; Path=/`;
+            //document.cookie = `firebase_token=${idToken}; Secure; HttpOnly; SameSite=None; Path=/`;
+
+            try{
+              const response = await axios.post(`${BACKEND_URL}/api/v1/user/firebase-signin`,{
+                token:idToken
+              },{
+                headers:{
+                  'Content-Type':'application/json'
+                },
+                withCredentials:true
+              });
+              console.log(response);
+            }catch(error){
+              console.log(error);
+            }
 
             // firebase id of user
             const uid : number = (+user.providerData[0].uid % 1e9);
